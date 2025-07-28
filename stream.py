@@ -1,23 +1,20 @@
-# stream.py
-import os
+import subprocess
 import time
 
-# 🔴 Your YouTube Stream Key
-STREAM_KEY = "mbbh-5q15-4khd-q11h-4cds"
-RTMP_URL = f"rtmp://a.rtmp.youtube.com/live2/{STREAM_KEY}"
-
-
-def start_stream():
-    print("🚀 Starting Stream...")
+def stream_video(link):
+    print(f"🎥 Streaming: {link}")
     while True:
-        os.system(
-            f'ffmpeg -re -stream_loop -1 -i video.mp4 '
-            f'-c:v libx264 -preset veryfast -maxrate 3000k -bufsize 6000k '
-            f'-pix_fmt yuv420p -g 50 -c:a aac -b:a 128k '
-            f'-f flv "{RTMP_URL}"')
-        print("🔁 Restarting in 5 sec...")
-        time.sleep(5)
-
+        try:
+            subprocess.run([
+                "ffmpeg", "-re",
+                "-i", link,
+                "-c:v", "copy", "-c:a", "aac",
+                "-f", "flv", "rtmp://a.rtmp.youtube.com/live2/YOUR_STREAM_KEY"
+            ], check=True)
+        except subprocess.CalledProcessError:
+            print("⚠️ Stream crashed. Restarting after 5 seconds...")
+            time.sleep(5)
 
 if __name__ == "__main__":
-    start_stream()
+    drive_link = "https://drive.google.com/uc?id=1l2D5FA9lKWLpf6bZoRTkH8NbwNsloQ29&export=download"
+    stream_video(drive_link)
