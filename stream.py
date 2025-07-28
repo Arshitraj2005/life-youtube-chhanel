@@ -3,16 +3,26 @@ import subprocess
 import time
 import os
 
-drive_id = "1l2D5FA9lKWLpf6bZoRTkH8NbwNsloQ29"
+# 🎬 Your Google Drive video ID
+drive_id = "1wnkZ4AnJJo7WyDQXmuV7VFtOW39xwBt9"
 local_file = "video.mp4"
-stream_url = "rtmp://a.rtmp.youtube.com/live2/YOUR_STREAM_KEY"  # ← Replace with your YouTube key
+
+# 🔑 Your YouTube stream key (hardcoded as requested)
+stream_key = "mbbh-5q15-4khd-q11h-4cds"
+stream_url = f"rtmp://a.rtmp.youtube.com/live2/{stream_key}"
 
 def download_video():
-    if not os.path.exists(local_file):
-        print("📥 Downloading from Google Drive...")
-        gdown.download(id=drive_id, output=local_file, quiet=False)
-    else:
+    if os.path.exists(local_file):
         print("✅ Video already exists, skipping download.")
+        return
+    print("📥 Starting download from Google Drive...")
+    try:
+        gdown.download(id=drive_id, output=local_file, quiet=False)
+        print("✅ Download complete.")
+    except Exception as e:
+        print(f"🚨 Download failed: {e}")
+        time.sleep(5)
+        exit(1)
 
 def stream_loop():
     while True:
@@ -25,7 +35,7 @@ def stream_loop():
                 "-f", "flv", stream_url
             ], check=True)
         except subprocess.CalledProcessError:
-            print("⚠️ FFmpeg crashed. Restarting in 5 sec...")
+            print("⚠️ FFmpeg crashed. Retrying in 5 sec...")
             time.sleep(5)
 
 if __name__ == "__main__":
