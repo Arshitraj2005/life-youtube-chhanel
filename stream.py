@@ -2,14 +2,39 @@ import gdown
 import subprocess
 import time
 import os
+import socket
+import psutil
+from flask import Flask
 
-# 🎬 Your Google Drive video ID
+# 🎬 Google Drive video ID
 drive_id = "1wnkZ4AnJJo7WyDQXmuV7VFtOW39xwBt9"
 local_file = "video.mp4"
 
-# 🔑 Your YouTube stream key (hardcoded as requested)
+# 🔑 YouTube stream key
 stream_key = "3gr0-q51j-d1ct-8702-bdb7"
-stream_url = f"rtmp://a.rtmp.youtube.com/live2/{stream_key}"
+stream_url = f"rtmps://a.rtmp.youtube.com:443/live2/{stream_key}"  # Secure RTMPS!
+
+# 🌐 Dummy Flask Server (for Render web service)
+app = Flask(__name__)
+@app.route("/")
+def home():
+    return "✅ Stream bot is live!"
+def start_flask():
+    app.run(host="0.0.0.0", port=int(os.getenv("PORT", 10000)))
+
+def kill_old_ffmpeg():
+    for proc in psutil.process_iter(["name", "cmdline"]):
+        if "ffmpeg" in proc.info["name"]:
+            proc.kill()
+
+def test_port(host="a.rtmp.youtube.com", port=443):
+    s = socket.socket()
+    s.settimeout(5)
+    try:
+        s.connect((host, port))
+        return True
+    except:
+        return False
 
 def download_video():
     if os.path.exists(local_file):
@@ -27,6 +52,12 @@ def download_video():
 
 def stream_loop():
     while True:
+        if not test_port():
+            print("🚫 Cannot reach RTMP server. Retrying in 10 sec...")
+            time.sleep(10)
+            continue
+
+        kill_old_ffmpeg()
         print("🎥 Starting stream...")
         try:
             subprocess.run([
@@ -43,5 +74,7 @@ def stream_loop():
             time.sleep(5)
 
 if __name__ == "__main__":
+    from threading import Thread
+    Thread(target=start_flask).start()
     download_video()
     stream_loop()
