@@ -15,6 +15,7 @@ def download_video():
     if os.path.exists(local_file):
         print("✅ Video already exists, skipping download.")
         return
+
     print("📥 Starting download from Google Drive...")
     try:
         gdown.download(id=drive_id, output=local_file, quiet=False)
@@ -29,10 +30,13 @@ def stream_loop():
         print("🎥 Starting stream...")
         try:
             subprocess.run([
-                "ffmpeg", "-re",
+                "ffmpeg",
+                "-re",
                 "-i", local_file,
-                "-c:v", "copy", "-c:a", "aac",
-                "-f", "flv", stream_url
+                "-c:v", "copy",
+                "-c:a", "aac",
+                "-f", "flv",
+                stream_url
             ], check=True)
         except subprocess.CalledProcessError:
             print("⚠️ FFmpeg crashed. Retrying in 5 sec...")
