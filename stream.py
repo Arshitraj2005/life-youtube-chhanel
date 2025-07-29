@@ -7,14 +7,9 @@ import os
 drive_id = "1wnkZ4AnJJo7WyDQXmuV7VFtOW39xwBt9"
 local_file = "video.mp4"
 
-# 🔑 YouTube Stream Key via Environment Variable
-stream_key = os.environ.get("3gr0-q51j-d1ct-8702-bdb7")
-
-# 🔁 Stream URL using tee muxer (Primary + Backup)
-stream_url = (
-    f"[f=flv]rtmp://a.rtmp.youtube.com/live2/{stream_key}|"
-    f"[f=flv]rtmp://b.rtmp.youtube.com/live2/{stream_key}"
-)
+# 🔑 Your YouTube stream key (hardcoded as requested)
+stream_key = "3gr0-q51j-d1ct-8702-bdb7"
+stream_url = f"rtmp://a.rtmp.youtube.com/live2/{stream_key}"
 
 def download_video():
     if os.path.exists(local_file):
@@ -40,8 +35,7 @@ def stream_loop():
                 "-i", local_file,
                 "-c:v", "copy",
                 "-c:a", "aac",
-                "-b:a", "128k",
-                "-f", "tee",
+                "-f", "flv",
                 stream_url
             ], check=True)
         except subprocess.CalledProcessError:
