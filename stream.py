@@ -8,7 +8,7 @@ drive_id = "1wnkZ4AnJJo7WyDQXmuV7VFtOW39xwBt9"
 local_file = "video.mp4"
 
 # 🔑 Your YouTube stream key (hardcoded as requested)
-stream_key = "0akr-61bb-wc67-4qgr-c2xc"
+stream_key = "3gr0-q51j-d1ct-8702-bdb7"
 stream_url = f"rtmp://a.rtmp.youtube.com/live2/{stream_key}"
 
 def download_video():
