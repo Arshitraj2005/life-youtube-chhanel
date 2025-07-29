@@ -9,7 +9,7 @@ def home():
     return "✅ Flask app is running 24x7 using UptimeRobot!"
 
 def run():
-    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 10000)))
+    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
 
 def keep_alive():
     t = Thread(target=run)
