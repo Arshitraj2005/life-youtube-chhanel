@@ -8,7 +8,7 @@ drive_id = "1wnkZ4AnJJo7WyDQXmuV7VFtOW39xwBt9"
 local_file = "video.mp4"
 
 # 🔑 YouTube Stream Key via Environment Variable
-stream_key = os.environ.get("STREAM_KEY")
+stream_key = os.environ.get("3gr0-q51j-d1ct-8702-bdb7")
 
 # 🔁 Stream URL using tee muxer (Primary + Backup)
 stream_url = (
