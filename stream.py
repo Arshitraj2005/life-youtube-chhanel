@@ -7,18 +7,19 @@ import os
 drive_id = "1wnkZ4AnJJo7WyDQXmuV7VFtOW39xwBt9"
 local_file = "video.mp4"
 
-# 🔑 Your YouTube stream key (hardcoded as requested)
+# 🔑 Your YouTube stream key
 stream_key = "0akr-61bb-wc67-4qgr-c2xc"
+
+# ✅ Correct tee muxer format
 stream_url = (
-    f"[f=flv]rtmp://a.rtmp.youtube.com/live2/{stream_key}|"
-    f"[f=flv]rtmp://b.rtmp.youtube.com/live2/{stream_key}?backup=1"
+    f"rtmp://a.rtmp.youtube.com/live2/{stream_key}|"
+    f"rtmp://b.rtmp.youtube.com/live2/{stream_key}?backup=1"
 )
 
 def download_video():
     if os.path.exists(local_file):
         print("✅ Video already exists, skipping download.")
         return
-
     print("📥 Starting download from Google Drive...")
     try:
         gdown.download(id=drive_id, output=local_file, quiet=False)
@@ -33,13 +34,9 @@ def stream_loop():
         print("🎥 Starting stream...")
         try:
             subprocess.run([
-                "ffmpeg",
-                "-re",
-                "-i", local_file,
-                "-c:v", "copy",
-                "-c:a", "aac",
-                "-f", "flv",
-                stream_url
+                "ffmpeg", "-re", "-i", local_file,
+                "-c:v", "copy", "-c:a", "aac",
+                "-f", "tee", f"[f=flv]{stream_url}"
             ], check=True)
         except subprocess.CalledProcessError:
             print("⚠️ FFmpeg crashed. Retrying in 5 sec...")
