@@ -10,11 +10,12 @@ local_file = "video.mp4"
 # 🔑 YouTube stream key
 stream_key = "0akr-61bb-wc67-4qgr-c2xc"
 
-# 🌐 Primary + Backup RTMP URLs (without format flags)
+# ✅ Primary + Backup RTMP URLs with format flags
 stream_url = (
-    f"rtmp://a.rtmp.youtube.com/live2/{stream_key}|"
-    f"rtmp://b.rtmp.youtube.com/live2/{stream_key}?backup=1"
+    f"[f=flv]rtmp://a.rtmp.youtube.com/live2/{stream_key}|"
+    f"[f=flv]rtmp://b.rtmp.youtube.com/live2/{stream_key}?backup=1"
 )
+
 
 def download_video():
     if os.path.exists(local_file):
