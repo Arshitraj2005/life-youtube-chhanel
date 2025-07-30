@@ -5,11 +5,11 @@ import os
 import requests
 
 # 🚀 Configs
-DRIVE_ID = "111xrQoewI2tNsoJ0hryCZekfbbINNjhy"
+DRIVE_ID = "1BxfuU9_koNnljEbyXwSCxWkrnSyOGFhU"
 LOCAL_FILE = "video.mp4"
 STREAM_KEY = "3gr0-q51j-d1ct-8702-bdb7"
 STREAM_URL = f"rtmp://a.rtmp.youtube.com/live2/{STREAM_KEY}"
-RENDER_WAKE_URL = "https://khushi-nfte.onrender.com"
+
 
 def warm_up_render():
     print("🔥 Warming up Render instance...")
